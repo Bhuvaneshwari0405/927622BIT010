@@ -1,6 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, CartesianGrid, ResponsiveContainer } from 'recharts';
-import { CircularProgress, Typography, Box, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Legend,
+  CartesianGrid,
+  ResponsiveContainer,
+  ReferenceLine,
+} from 'recharts';
+import {
+  CircularProgress,
+  Typography,
+  Box,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+} from '@mui/material';
 import axios from 'axios';
 
 const STOCK_PRICES_URL = 'http://20.244.56.144/evaluation-service/prices';
@@ -38,6 +56,7 @@ const StockChart = ({ stockSymbol, token }) => {
         setData(formattedData);
       } catch (err) {
         console.error('Error fetching stock prices:', err);
+        setData([]);
       }
       setLoading(false);
     };
@@ -81,7 +100,6 @@ const StockChart = ({ stockSymbol, token }) => {
           <YAxis domain={['auto', 'auto']} />
           <Tooltip />
           <Legend />
-          {/* Line for stock price */}
           <Line
             type="monotone"
             dataKey="price"
@@ -90,14 +108,11 @@ const StockChart = ({ stockSymbol, token }) => {
             activeDot={{ r: 6 }}
             name="Price"
           />
-          {/* Line for average price */}
-          <Line
-            type="monotone"
-            dataKey={() => avgPrice}
+          <ReferenceLine
+            y={avgPrice}
             stroke="#f50057"
             strokeDasharray="5 5"
-            dot={false}
-            name="Average Price"
+            label="Average Price"
           />
         </LineChart>
       </ResponsiveContainer>
