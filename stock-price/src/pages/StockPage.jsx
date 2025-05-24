@@ -1,5 +1,12 @@
 import { useState } from 'react';
 import { Box, Select, MenuItem, Typography } from '@mui/material';
+import StockChart from '../components/StockChart';
+
+// Dummy data for testing
+const dummyData = Array.from({ length: 20 }, (_, i) => ({
+  time: `${i + 1} min ago`,
+  price: (100 + Math.random() * 10).toFixed(2),
+}));
 
 export default function StockPage() {
   const [minutes, setMinutes] = useState(60);
@@ -15,10 +22,7 @@ export default function StockPage() {
         ))}
       </Select>
 
-      {/* Placeholder for chart */}
-      <Box mt={4} p={2} border="1px dashed grey" height={300} display="flex" alignItems="center" justifyContent="center">
-        <Typography color="text.secondary">[Chart will be shown here]</Typography>
-      </Box>
+      <StockChart data={dummyData} />
     </Box>
   );
 }
