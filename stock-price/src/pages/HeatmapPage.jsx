@@ -1,8 +1,13 @@
 import { useState } from 'react';
 import { Box, Select, MenuItem, Typography } from '@mui/material';
+import CorrelationHeatmap from '../components/CorrelationHeatmap';
+import { generateHeatmapData } from '../utils/generateHeatmapData';
+
+const stocks = ['AAPL', 'GOOG', 'MSFT', 'TSLA', 'AMZN'];
 
 export default function HeatmapPage() {
   const [minutes, setMinutes] = useState(60);
+  const heatmapData = generateHeatmapData(stocks);
 
   return (
     <Box p={2}>
@@ -15,10 +20,7 @@ export default function HeatmapPage() {
         ))}
       </Select>
 
-      {/* Placeholder for heatmap */}
-      <Box mt={4} p={2} border="1px dashed grey" height={300} display="flex" alignItems="center" justifyContent="center">
-        <Typography color="text.secondary">[Heatmap will be shown here]</Typography>
-      </Box>
+      <CorrelationHeatmap data={heatmapData} stocks={stocks} />
     </Box>
   );
 }
