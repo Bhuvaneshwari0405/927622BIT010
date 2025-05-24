@@ -15,7 +15,7 @@ export default function CorrelationHeatmap({ data, stocks }) {
       <Typography variant="h6" mb={2}>Correlation Heatmap</Typography>
 
       <Box display="grid" gridTemplateColumns={`80px repeat(${stocks.length}, 1fr)`} gap="1px" bgcolor="#ccc">
-        {/* Header Row */}
+        
         <Box></Box>
         {stocks.map((s) => (
           <Tooltip key={s} title={`Avg: --  StdDev: --`} arrow>
@@ -23,7 +23,7 @@ export default function CorrelationHeatmap({ data, stocks }) {
           </Tooltip>
         ))}
 
-        {/* Heatmap Rows */}
+      
         {stocks.map((rowStock) => (
           <>
             <Tooltip title={`Avg: --  StdDev: --`} arrow>

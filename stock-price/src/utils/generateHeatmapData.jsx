@@ -5,7 +5,7 @@ export function generateHeatmapData(stocks) {
       data.push({
         x: stocks[i],
         y: stocks[j],
-        correlation: (Math.random() * 2 - 1).toFixed(2), // -1 to 1
+        correlation: (Math.random() * 2 - 1).toFixed(2), 
         avg: (Math.random() * 100 + 100).toFixed(2),
         stdDev: (Math.random() * 5).toFixed(2)
       });

@@ -1,28 +1,73 @@
-import { useState } from 'react';
-import { Box, Select, MenuItem, Typography } from '@mui/material';
-import StockChart from '../components/StockChart';
+import React, { useEffect, useState } from 'react';
+import api from '../api/apiClient';
+import {
+  Container,
+  Typography,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  CircularProgress,
+} from '@mui/material';
 
-// Dummy data for testing
-const dummyData = Array.from({ length: 20 }, (_, i) => ({
-  time: `${i + 1} min ago`,
-  price: (100 + Math.random() * 10).toFixed(2),
-}));
+const StockPage = () => {
+  const [stocks, setStocks] = useState([]);
+  const [selectedStock, setSelectedStock] = useState('');
+  const [loading, setLoading] = useState(false);
 
-export default function StockPage() {
-  const [minutes, setMinutes] = useState(60);
+  const fetchStocks = async () => {
+    try {
+      setLoading(true);
+      const res = await api.get('/stocks');
+      const stocksObj = res.data.stocks;
+      const stocksArray = Object.entries(stocksObj).map(([name, symbol]) => ({
+        name,
+        symbol,
+      }));
+      setStocks(stocksArray);
+      setLoading(false);
+    } catch (err) {
+      console.error('Failed to fetch stocks', err);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchStocks();
+  }, []);
 
   return (
-    <Box p={2}>
-      <Typography variant="h4">Stock Page</Typography>
+    <Container>
+      <Typography variant="h4" gutterBottom>
+        📈 Stock Price Chart
+      </Typography>
 
-      <Typography variant="subtitle1" mt={2}>Select Time Interval</Typography>
-      <Select value={minutes} onChange={(e) => setMinutes(e.target.value)}>
-        {[5, 15, 30, 60, 120].map((m) => (
-          <MenuItem key={m} value={m}>{m} Minutes</MenuItem>
-        ))}
-      </Select>
+      {loading ? (
+        <CircularProgress />
+      ) : (
+        <FormControl fullWidth margin="normal">
+          <InputLabel>Select a Stock</InputLabel>
+          <Select
+            value={selectedStock}
+            label="Select a Stock"
+            onChange={(e) => setSelectedStock(e.target.value)}
+          >
+            {stocks.map((stock) => (
+              <MenuItem key={stock.symbol} value={stock.symbol}>
+                {stock.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      )}
 
-      <StockChart data={dummyData} />
-    </Box>
+      {selectedStock && (
+        <Typography variant="h6" sx={{ mt: 3 }}>
+          Chart for: {selectedStock}
+        </Typography>
+      )}
+    </Container>
   );
-}
+};
+
+export default StockPage;
